@@ -1,24 +1,26 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
-*.db
 *.sqlite3
 *.env
-venv/
-env/
-ENV/
 
 # Django
-*.log
 media/
 staticfiles/
+db.sqlite3
+*.log
 
-# VSCode
+# IDEs
 .vscode/
+.idea/
+*.swp
 
-# OS files
+# System files
 .DS_Store
 Thumbs.db
+*.lnk
 
+# OneDrive temp files
+~$*
