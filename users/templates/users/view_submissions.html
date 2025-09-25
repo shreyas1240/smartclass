@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Submissions - {{ assignment.title }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navbar -->
+<nav class="bg-indigo-900 text-white p-4 flex justify-between">
+  <h1 class="text-xl font-bold">Submissions for {{ assignment.title }}</h1>
+  <a href="{% url 'faculty_assignments' %}" class="hover:underline">Back</a>
+</nav>
+
+<div class="max-w-5xl mx-auto mt-6 bg-white p-6 rounded shadow">
+  {% if submissions %}
+    <table class="w-full border text-left">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">Student</th>
+          <th class="p-2 border">Course</th>
+          <th class="p-2 border">Submitted File</th>
+          <th class="p-2 border">Submitted At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for submission in submissions %}
+          <tr class="hover:bg-gray-50">
+            <td class="p-2 border">{{ submission.student.user.get_full_name|default:submission.student.user.username }}</td>
+            <td class="p-2 border">{{ submission.assignment.course.name }}</td>
+            <td class="p-2 border">
+              {% if submission.submitted_file %}
+                <a href="{{ submission.submitted_file.url }}" class="text-blue-600 hover:underline" target="_blank">Download</a>
+              {% else %}
+                Not submitted
+              {% endif %}
+            </td>
+            <td class="p-2 border">{{ submission.submitted_at }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-center text-gray-600 font-semibold">No submissions yet for this assignment.</p>
+  {% endif %}
+</div>
+
+</body>
+</html>

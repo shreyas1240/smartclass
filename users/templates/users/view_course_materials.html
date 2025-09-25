@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ course.name }} - Materials</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-indigo-900 text-white p-4 flex justify-between items-center">
+  <h1 class="text-xl font-bold">{{ course.name }} - Materials</h1>
+  {% if user.facultyprofile %}
+    <a href="{% url 'faculty_courses' %}" class="hover:underline">My Courses</a>
+  {% else %}
+    <a href="{% url 'courses_page' %}" class="hover:underline">My Courses</a>
+  {% endif %}
+</nav>
+
+<!-- Main Content -->
+<div class="max-w-6xl mx-auto mt-6 bg-white p-6 rounded shadow">
+  
+  <!-- Faculty Upload Button -->
+  {% if user.facultyprofile %}
+    <div class="mb-4">
+      <a href="{% url 'upload_course_material' course.id %}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+        Upload New Material
+      </a>
+    </div>
+  {% endif %}
+
+  <h2 class="text-2xl font-semibold mb-4">Course Materials</h2>
+
+  <table class="w-full border text-left">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="p-2 border">Title</th>
+        <th class="p-2 border">Description</th>
+        <th class="p-2 border">Uploaded At</th>
+        <th class="p-2 border">Download</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for material in materials %}
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border">{{ material.title }}</td>
+        <td class="p-2 border">{{ material.description|default:"-" }}</td>
+        <td class="p-2 border">{{ material.uploaded_at|date:"d M Y H:i" }}</td>
+        <td class="p-2 border">
+          <a href="{{ material.file.url }}" class="text-green-600 hover:underline" download>Download</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td class="p-2 border text-center" colspan="4">No materials uploaded yet.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

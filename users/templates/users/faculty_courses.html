@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Faculty Courses</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-indigo-900 text-white p-4 flex justify-between items-center">
+  <h1 class="text-xl font-bold">Faculty Courses</h1>
+  <a href="{% url 'faculty_dashboard' %}" class="hover:underline">Dashboard</a>
+</nav>
+
+<!-- Main Content -->
+<div class="max-w-6xl mx-auto mt-6 bg-white p-6 rounded shadow">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold">Courses You Teach</h2>
+    <a href="{% url 'create_course' %}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+      Add New Course
+    </a>
+  </div>
+
+  <table class="w-full border text-left">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="p-2 border">Course Code</th>
+        <th class="p-2 border">Course Name</th>
+        <th class="p-2 border">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border">{{ course.code }}</td>
+        <td class="p-2 border">{{ course.name }}</td>
+        <td class="p-2 border space-x-2">
+          <a href="{% url 'upload_course_material' course.id %}" class="text-indigo-600 hover:underline">Upload Material</a>
+          <a href="{% url 'view_course_materials' course.id %}" class="text-green-600 hover:underline">View Materials</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td class="p-2 border text-center" colspan="3">No courses assigned.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

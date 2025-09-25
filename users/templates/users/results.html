@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Results</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<nav class="bg-indigo-900 text-white p-4 flex justify-between">
+  <h1 class="text-xl font-bold">Exam Results</h1>
+  <a href="{% url 'student_dashboard' %}" class="hover:underline">Dashboard</a>
+</nav>
+
+<div class="max-w-4xl mx-auto mt-6 bg-white p-6 rounded shadow">
+  <h2 class="text-2xl font-semibold mb-4">Latest Results</h2>
+  <table class="w-full border">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="p-2 border">Course</th>
+        <th class="p-2 border">Grade</th>
+        <th class="p-2 border">Credits</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="p-2 border">Operating Systems</td>
+        <td class="p-2 border text-green-700 font-semibold">A</td>
+        <td class="p-2 border">4</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
