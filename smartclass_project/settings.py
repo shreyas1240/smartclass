@@ -7,11 +7,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ---------------- Security ----------------
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "replace-with-your-own-secret-key")
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
 # ---------------- Allowed Hosts ----------------
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost 127.0.0.1").split()
 CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split()
+
+# Optional HTTPS fix for Render
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ---------------- Installed Apps ----------------
 INSTALLED_APPS = [
@@ -27,7 +30,7 @@ INSTALLED_APPS = [
 # ---------------- Middleware ----------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # For serving static files in production
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -86,11 +89,10 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-USE_L10N = True
 
 # ---------------- Static Files ----------------
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'users' / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'users' / 'static']  # optional
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
