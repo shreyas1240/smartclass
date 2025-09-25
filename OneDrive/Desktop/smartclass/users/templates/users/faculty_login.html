@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Faculty Login</title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url("{% static 'C:\Users\Admin\OneDrive\Desktop\smartclass\users\static\users\images\facultyimage.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+h2 { text-align: center; margin-bottom: 20px; color: #333; }
+label { font-weight: bold; }
+input[type="text"], input[type="password"] {
+    width: 100%; padding: 10px; margin-top: 6px; margin-bottom: 18px;
+    border: 1px solid #ccc; border-radius: 5px;
+}
+button {
+    width: 100%; padding: 12px;
+    background: #28a745; color: #fff; border: none;
+    border-radius: 5px; cursor: pointer; font-size: 16px;
+}
+button:hover { background: #1e7e34; }
+.links { text-align: center; margin-top: 15px; }
+.links a { color: #28a745; text-decoration: none; }
+.links a:hover { text-decoration: underline; }
+.error { color: red; text-align: center; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Faculty Login</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <p class="error">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        <label>Username:</label>
+        <input type="text" name="username" placeholder="Enter username" required>
+        
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="Enter password" required>
+        
+        <button type="submit">Login</button>
+    </form>
+    
+    <div class="links">
+        <p>New faculty? <a href="{% url 'faculty_register' %}">Register here</a></p>
+    </div>
+</div>
+</body>
+</html>
