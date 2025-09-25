@@ -1,4 +1,6 @@
+# -----------------------------
 # Python
+# -----------------------------
 __pycache__/
 *.py[cod]
 *.pyo
@@ -6,21 +8,61 @@ __pycache__/
 *.sqlite3
 *.env
 
+# -----------------------------
 # Django
+# -----------------------------
 media/
 staticfiles/
 db.sqlite3
 *.log
 
-# IDEs
+# -----------------------------
+# IDEs / Editors
+# -----------------------------
 .vscode/
 .idea/
 *.swp
 
-# System files
+# -----------------------------
+# System files (Windows & macOS)
+# -----------------------------
 .DS_Store
 Thumbs.db
 *.lnk
+desktop.ini
+*.tmp
+*.bak
+*.old
 
+# -----------------------------
+# Windows folders
+# -----------------------------
+AppData/
+Contacts/
+Documents/
+Downloads/
+Favorites/
+IntelGraphicsProfiles/
+Links/
+Music/
+Pictures/
+Saved Games/
+Searches/
+Videos/
+Local Settings/
+NetHood/
+PrintHood/
+Recent/
+SendTo/
+Start Menu/
+Templates/
+
+# -----------------------------
 # OneDrive temp files
+# -----------------------------
 ~$*
+
+# -----------------------------
+# Pytest / testing
+# -----------------------------
+.pytest_cache/
