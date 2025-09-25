@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+<div class="flex h-screen">
+
+  <!-- Sidebar -->
+  <aside class="bg-indigo-900 text-gray-100 w-64 flex flex-col">
+    <div class="p-5 text-2xl font-bold border-b border-indigo-700">
+      SmartClass
+    </div>
+    <nav class="flex-1 px-2 py-4 space-y-2">
+      <a href="{% url 'student_dashboard' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+        <i data-feather="home" class="mr-3"></i> Dashboard
+      </a>
+      <a href="{% url 'student_profile' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+        <i data-feather="user" class="mr-3"></i> Profile
+      </a>
+      <a href="{% url 'courses_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+        <i data-feather="book-open" class="mr-3"></i> Courses
+      </a>
+      <a href="{% url 'attendance_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+        <i data-feather="check-circle" class="mr-3"></i> Attendance
+      </a>
+      <a href="{% url 'results_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+        <i data-feather="bar-chart-2" class="mr-3"></i> Results
+      </a>
+      <a href="{% url 'assignments_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+        <i data-feather="file-text" class="mr-3"></i> Assignments
+      </a>
+    </nav>
+    <div class="p-4 text-center text-sm text-gray-400 border-t border-indigo-700">
+      © 2025 SmartClass
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 overflow-y-auto">
+
+    <!-- Top bar -->
+    <header class="flex justify-between items-center bg-white shadow px-6 py-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">
+          Welcome, {{ request.user.get_full_name|default:request.user.username }}
+        </h1>
+        <p class="text-gray-500">
+          {% if student.semester %}Semester {{ student.semester }}{% endif %}
+          {% if student.department %} • {{ student.department }}{% endif %}
+        </p>
+      </div>
+
+      <!-- Profile dropdown -->
+      <div class="relative">
+        <button id="avatarBtn" class="focus:outline-none">
+          {% if student.photo %}
+            <img src="{{ student.photo.url }}" alt="Profile"
+                 class="w-12 h-12 rounded-full object-cover border-2 border-indigo-600">
+          {% else %}
+            <div class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+              <i data-feather="user"></i>
+            </div>
+          {% endif %}
+        </button>
+
+        <!-- Dropdown menu -->
+        <div id="avatarMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50">
+          <a href="{% url 'edit_student_profile' %}" class="block px-4 py-2 hover:bg-gray-100">Edit Profile</a>
+          <a href="{% url 'user_logout' %}" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero / profile summary -->
+    <section class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-6 m-6 rounded-2xl flex items-center shadow">
+      <div class="mr-6">
+        {% if student.photo %}
+          <img src="{{ student.photo.url }}" class="w-28 h-28 rounded-full border-4 border-white object-cover">
+        {% else %}
+          <div class="w-28 h-28 rounded-full bg-white/20 flex items-center justify-center">
+            <i data-feather="user" class="w-14 h-14"></i>
+          </div>
+        {% endif %}
+      </div>
+      <div>
+        <h2 class="text-3xl font-bold">
+          {{ request.user.get_full_name|default:request.user.username }}
+        </h2>
+        {% if student.roll_no %}
+          <p class="mt-1">Roll No: {{ student.roll_no }}</p>
+        {% endif %}
+        <p class="mt-1">Email: {{ student.user.email }}</p>
+        {% if student.mobile_number %}
+          <p class="mt-1">Phone: {{ student.mobile_number }}</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- Quick stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 px-6 mb-8">
+      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
+        <p class="text-gray-500">Courses</p>
+        <h3 class="text-2xl font-bold text-indigo-700">5</h3>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
+        <p class="text-gray-500">Assignments Due</p>
+        <h3 class="text-2xl font-bold text-indigo-700">3</h3>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
+        <p class="text-gray-500">Attendance</p>
+        <h3 class="text-2xl font-bold text-indigo-700">92%</h3>
+      </div>
+      <div class="bg-white p-5 rounded-xl shadow hover:shadow-md transition">
+        <p class="text-gray-500">GPA</p>
+        <h3 class="text-2xl font-bold text-indigo-700">8.7</h3>
+      </div>
+    </div>
+
+    <!-- Upcoming deadlines table -->
+    <section class="bg-white rounded-xl shadow m-6 p-6">
+      <h3 class="text-xl font-bold mb-4">Upcoming Deadlines</h3>
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="p-3 border">Course</th>
+            <th class="p-3 border">Task</th>
+            <th class="p-3 border">Due</th>
+            <th class="p-3 border">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 border">Data Science</td>
+            <td class="p-3 border">Mini Project</td>
+            <td class="p-3 border">25 Sep</td>
+            <td class="p-3 border text-green-600 font-semibold">Pending</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<script>
+  feather.replace();
+
+  // Avatar dropdown toggle
+  const btn = document.getElementById('avatarBtn');
+  const menu = document.getElementById('avatarMenu');
+  btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+  window.addEventListener('click', e => {
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.add('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>

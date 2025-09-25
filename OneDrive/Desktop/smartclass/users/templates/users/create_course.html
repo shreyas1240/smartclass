@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Course – SmartClass</title>
+
+    <!-- ✅ Correct Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-blue-700 text-white p-4 flex justify-between items-center">
+    <div class="font-bold text-xl">SmartClass</div>
+    <div>
+        Welcome, {{ request.user.username }} |
+        <a href="{% url 'faculty_dashboard' %}" class="underline hover:text-gray-200">Dashboard</a> |
+        <a href="{% url 'logout' %}" class="underline hover:text-gray-200">Logout</a>
+    </div>
+</nav>
+
+<!-- Breadcrumb -->
+<div class="p-4 text-gray-600">
+    <a href="{% url 'faculty_dashboard' %}" class="underline hover:text-blue-700">Dashboard</a> /
+    <a href="{% url 'faculty_courses' %}" class="underline hover:text-blue-700">Courses</a> /
+    <span class="font-semibold">Create Course</span>
+</div>
+
+<!-- Main Form Card -->
+<div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg mt-6">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Create New Course</h2>
+
+    <form method="POST" class="space-y-5">
+        {% csrf_token %}
+
+        <!-- Course Code -->
+        <div>
+            <label class="block mb-1 font-medium text-gray-700">Course Code</label>
+            {{ form.code }}
+            {% if form.code.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.code.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Course Name -->
+        <div>
+            <label class="block mb-1 font-medium text-gray-700">Course Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.name.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-between items-center">
+            <button type="submit"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Create Course
+            </button>
+            <a href="{% url 'faculty_courses' %}"
+               class="text-blue-600 underline hover:text-blue-800">
+               Back to Courses
+            </a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

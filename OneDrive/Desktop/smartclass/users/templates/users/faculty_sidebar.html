@@ -1,0 +1,28 @@
+<aside class="bg-indigo-900 text-gray-100 w-64 flex flex-col">
+  <div class="p-5 text-2xl font-bold border-b border-indigo-700">
+    SmartClass
+  </div>
+  <nav class="flex-1 px-2 py-4 space-y-2">
+    <a href="{% url 'faculty_dashboard' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+      <i data-feather="home" class="mr-3"></i> Dashboard
+    </a>
+    <a href="{% url 'faculty_profile' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+      <i data-feather="user" class="mr-3"></i> Profile
+    </a>
+    <a href="{% url 'faculty_courses_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+      <i data-feather="book-open" class="mr-3"></i> Courses
+    </a>
+    <a href="{% url 'faculty_attendance_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+      <i data-feather="check-circle" class="mr-3"></i> Attendance
+    </a>
+    <a href="{% url 'faculty_results_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+      <i data-feather="bar-chart-2" class="mr-3"></i> Results
+    </a>
+    <a href="{% url 'faculty_assignments_page' %}" class="flex items-center px-3 py-2 rounded hover:bg-indigo-700">
+      <i data-feather="file-text" class="mr-3"></i> Assignments
+    </a>
+  </nav>
+  <div class="p-4 text-center text-sm text-gray-400 border-t border-indigo-700">
+    © 2025 SmartClass
+  </div>
+</aside>
