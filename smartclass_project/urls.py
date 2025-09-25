@@ -8,10 +8,10 @@ urlpatterns = [
     # Admin panel
     path("admin/", admin.site.urls),
 
-    # App URLs (includes landing, student/faculty pages, etc.)
+    # Main app URLs (landing, student/faculty pages, etc.)
     path("", include("users.urls")),
 
-    # Optional: global login/logout using Django auth views
+    # Global login/logout (optional if not in users/urls.py)
     path(
         "login/",
         auth_views.LoginView.as_view(template_name="users/login.html"),
@@ -28,4 +28,3 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
