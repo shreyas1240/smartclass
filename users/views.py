@@ -68,6 +68,9 @@ def faculty_register(request):
 
 # ---------------- Login ----------------
 def student_login(request):
+    if request.user.is_authenticated and hasattr(request.user, "studentprofile"):
+        return redirect("student_dashboard")
+
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         password = request.POST.get("password", "")
@@ -80,6 +83,9 @@ def student_login(request):
 
 
 def faculty_login(request):
+    if request.user.is_authenticated and hasattr(request.user, "facultyprofile"):
+        return redirect("faculty_dashboard")
+
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         password = request.POST.get("password", "")
@@ -192,7 +198,7 @@ def results_page(request):
 @login_required
 def assignments_page(request):
     student = get_object_or_404(StudentProfile, user=request.user)
-    assignments = Assignment.objects.filter(course__in=Course.objects.all())
+    assignments = Assignment.objects.filter(course__in=student.course_set.all())
     submission_status = {
         a.id: AssignmentSubmission.objects.filter(assignment=a, student=student).first()
         for a in assignments
@@ -289,8 +295,8 @@ def faculty_attendance(request):
     students = []
     attendance_records = {}
     if selected_course_id:
-        course = get_object_or_404(Course, id=selected_course_id)
-        students = StudentProfile.objects.all()
+        course = get_object_or_404(Course, id=selected_course_id, faculty=faculty)
+        students = StudentProfile.objects.filter(course=course)  # FIXED: only course students
         attendance_records = {
             att.student.id: att.status
             for att in Attendance.objects.filter(course=course, date=selected_date)
@@ -360,7 +366,7 @@ def faculty_assignments(request):
 @login_required
 def view_submissions(request, assignment_id):
     faculty = get_object_or_404(FacultyProfile, user=request.user)
-    assignment = get_object_or_404(Assignment, id=assignment_id)
+    assignment = get_object_or_404(Assignment, id=assignment_id, course__faculty=faculty)
     submissions = AssignmentSubmission.objects.filter(assignment=assignment)
     return render(
         request,

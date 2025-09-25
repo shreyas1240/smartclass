@@ -22,8 +22,8 @@ class StudentProfile(models.Model):
     father_name = models.CharField(max_length=100, blank=True, null=True)
     mother_name = models.CharField(max_length=100, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    mobile_number = models.CharField(max_length=15, blank=True, null=True)
-    parent_phone = models.CharField(max_length=15, blank=True, null=True)
+    mobile_number = models.CharField(max_length=20, blank=True, null=True)
+    parent_phone = models.CharField(max_length=20, blank=True, null=True)
     photo = models.ImageField(upload_to='student_photos/', blank=True, null=True)
     signature = models.ImageField(upload_to='student_signatures/', blank=True, null=True)
 
@@ -42,7 +42,7 @@ class FacultyProfile(models.Model):
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True)
     father_name = models.CharField(max_length=100, blank=True, null=True)
     mother_name = models.CharField(max_length=100, blank=True, null=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     qualifications = models.TextField(blank=True, null=True)
     experience = models.TextField(blank=True, null=True)
@@ -82,7 +82,9 @@ class Attendance(models.Model):
     status = models.CharField(max_length=10, choices=(('Present', 'Present'), ('Absent', 'Absent')))
 
     class Meta:
-        unique_together = ('student', 'course', 'date')
+        constraints = [
+            models.UniqueConstraint(fields=['student', 'course', 'date'], name='unique_attendance')
+        ]
 
     def __str__(self):
         return f"{self.student.user.username} - {self.course.code} - {self.date} - {self.status}"
@@ -108,7 +110,9 @@ class AssignmentSubmission(models.Model):
     submitted_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('assignment', 'student')
+        constraints = [
+            models.UniqueConstraint(fields=['assignment', 'student'], name='unique_submission')
+        ]
 
     def __str__(self):
         return f"{self.student.user.username} - {self.assignment.title}"
@@ -116,16 +120,13 @@ class AssignmentSubmission(models.Model):
 
 # ---------------- Signals ----------------
 @receiver(post_save, sender=User)
-def create_profile_for_new_user(sender, instance, created, **kwargs):
+def create_or_update_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_related_profiles(sender, instance, **kwargs):
-    if hasattr(instance, 'profile'):
-        instance.profile.save()
-    if hasattr(instance, 'studentprofile'):
-        instance.studentprofile.save()
-    if hasattr(instance, 'facultyprofile'):
-        instance.facultyprofile.save()
+    else:
+        if hasattr(instance, 'profile'):
+            instance.profile.save()
+        if hasattr(instance, 'studentprofile'):
+            instance.studentprofile.save()
+        if hasattr(instance, 'facultyprofile'):
+            instance.facultyprofile.save()
